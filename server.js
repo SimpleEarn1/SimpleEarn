@@ -6,31 +6,31 @@ require('dotenv').config();
 
 const app = express();
 
-// 🔧 Middleware
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// 🔌 Подключение к MongoDB
+// Подключение к MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-  .then(() => console.log('✅ MongoDB подключен'))
-  .catch(err => console.error('❌ Ошибка подключения к MongoDB:', err));
+.then(() => console.log('✅ MongoDB подключен'))
+.catch(err => console.error('❌ Ошибка подключения к MongoDB:', err));
 
-// 🔗 Роуты API
+// API роуты (пример с auth)
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
-// 📦 Подключаем React build
+// Статика React (dashboard)
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 
-// 🔁 Все остальные маршруты — отдаем React index.html
+// Любой другой маршрут отдаём index.html React-приложения
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
-// 🚀 Запуск сервера
+// Запуск сервера
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Сервер запущен на порту ${PORT}`);
