@@ -6,8 +6,20 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
+const corsOptions = {
+  origin: 'https://simpleearn-a3dt.onrender.com', // укажи свой фронтенд домен
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+
+// ВАЖНО: подключаем CORS один раз с опциями, до всех роутов и middleware
+app.use(cors(corsOptions));
+
+// Обработка preflight-запросов для всех маршрутов
+app.options('*', cors(corsOptions));
+
+// Middleware для парсинга JSON
 app.use(express.json());
 
 // Подключение к MongoDB
@@ -18,14 +30,14 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('✅ MongoDB подключен'))
 .catch(err => console.error('❌ Ошибка подключения к MongoDB:', err));
 
-// API роуты (пример с auth)
+// Роуты API
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
-// Статика React (dashboard)
+// Статика React-приложения (dashboard)
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 
-// Любой другой маршрут отдаём index.html React-приложения
+// Все остальные маршруты — отдаём index.html React-приложения
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
