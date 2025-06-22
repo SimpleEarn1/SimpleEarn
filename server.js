@@ -12,7 +12,8 @@ app.use(express.json());
 
 // Добавляем заголовок Content Security Policy
 app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", 
+  res.setHeader(
+    "Content-Security-Policy",
     "default-src 'self'; " +
     "img-src 'self' data: https://yastatic.net; " +
     "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
