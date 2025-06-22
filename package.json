@@ -1,11 +1,11 @@
 {
   "name": "my-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "proxy": "http://localhost:5000",
   "scripts": {
-    "start": "node server.js",                      
-    "heroku-postbuild": "cd client && npm install && npm run build",  
+    "start": "node server.js",
+    "postinstall": "cd client && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
