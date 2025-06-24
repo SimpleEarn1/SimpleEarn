@@ -38,7 +38,7 @@ app.use('/api/auth', authRoutes);
 app.use(express.static(path.join(__dirname, 'client', 'build')));
 
 // Все остальные маршруты — отдаём index.html React-приложения
-app.get('*', (req, res) => {
+app.get(/^(?!\/api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
 });
 
